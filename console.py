@@ -3,6 +3,7 @@
 import cmd
 import sys
 import os
+import re
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -24,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
                'State': State, 'City': City, 'Amenity': Amenity,
                'Review': Review
               }
-    dot_cmds = ['all', 'count', 'show', 'destroy', 'update']
+    dot_cmds = ['all', 'count', 'show', 'destroy', 'update', 'create']
     types = {
              'number_rooms': int, 'number_bathrooms': int,
              'max_guest': int, 'price_by_night': int,
@@ -45,22 +46,29 @@ class HBNBCommand(cmd.Cmd):
         _cmd = _cls = _id = _args = ''  # initialize line elements
 
         # scan for general formating - i.e '.', '(', ')'
-        if not ('.' in line and '(' in line and ')' in line):
+        if not ('.' in line):
             return line
 
         try:  # parse line left to right
-            pline = line[:]  # parsed line
+            pline = re.split("\.", line)  # parsed line
 
             # isolate <class name>
-            _cls = pline[:pline.find('.')]
+            _cls = pline[0]
 
             # isolate and validate <command>
-            _cmd = pline[pline.find('.') + 1:pline.find('(')]
-            if _cmd not in HBNBCommand.dot_cmds:
-                raise Exception
+            if '(' in pline[1]: # syntax: <class name>.<command>()
+                args = re.split("\(", pline[1])
+                _cmd = args[0]
+                if _cmd not in HBNBCommand.dot_cmds:
+                    raise Exception
+                pline = args[1].replace(')', '')
+            else: # syntax: <class name>.<command>
+                _cmd = pline[1]
+                if _cmd not in HBNBCommand.dot_cmds:
+                    raise Exception
+                pline = None
 
             # if parantheses contain arguments, parse them
-            pline = pline[pline.find('(') + 1:pline.find(')')]
             if pline:
                 # partition args: (<id>, [<delim>], [<*args>])
                 pline = pline.partition(', ')  # pline convert to tuple
@@ -81,7 +89,6 @@ class HBNBCommand(cmd.Cmd):
                         _args = pline.replace(',', '')
                         # _args = _args.replace('\"', '')
             line = ' '.join([_cmd, _cls, _id, _args])
-
         except Exception as mess:
             pass
         finally:
