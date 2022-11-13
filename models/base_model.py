@@ -56,11 +56,10 @@ class BaseModel:
                     setattr(self, key, value)
             # Runs if new instance is not created from existing data
             if not kwargs.__contains__('updated_at') and\
-                not kwargs.__contains__('created_at'):
+                    not kwargs.__contains__('created_at'):
                 self.id = str(uuid.uuid4())
                 self.created_at = datetime.utcnow()
                 self.updated_at = datetime.utcnow()
-
 
     def __str__(self):
         """Returns a string representation of the instance"""
