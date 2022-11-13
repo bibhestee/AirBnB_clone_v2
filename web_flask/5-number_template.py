@@ -77,7 +77,7 @@ def num(n):
 def number_template(n):
     """
         < Number template >
-    This function display an html page with n in H1 tag inside BODY
+    This function display a html page with n in H1 tag inside BODY
     <n> must be an integer.
     """
     return render_template('5-number.html', n=n)
