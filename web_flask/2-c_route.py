@@ -44,8 +44,8 @@ def c_route(text):
     This function returns the string "C <text>" when '/c/<text>' is requested.
 
     """
-    value = text.replace('_', ' ')
-    return f"C {value}"
+    text = text.replace('_', ' ')
+    return f'C {text}'
 
 
 if __name__ == "__main__":
