@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """
-
     < 2-C_ROUTE >
 
     This script starts a Flask web application that listen on 0.0.0.0 port 5000
@@ -18,9 +17,7 @@ app = Flask(__name__)
 def hello():
     """
         < Hello >
-
     This function returns the string "Hello HBNB!" when '/' is requested.
-
     """
     return "Hello HBNB!"
 
@@ -29,9 +26,7 @@ def hello():
 def hbnb_route():
     """
         < HBNB >
-
     This function returns the string "HBNB" when '/hbnb' is requested.
-
     """
     return "HBNB"
 
@@ -40,14 +35,12 @@ def hbnb_route():
 def c_route(text):
     """
         < C Route >
-
     This function returns the string "C <text>" when '/c/<text>' is requested.
-
     """
     text = text.replace('_', ' ')
     return f'C {text}'
 
 
+# Run the flask app on all addresses
 if __name__ == "__main__":
-    # Run the flask app on all addresses
     app.run(host='0.0.0.0')
