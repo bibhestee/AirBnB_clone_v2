@@ -44,10 +44,10 @@ def c_route(text):
     This function returns the string "C <text>" when '/c/<text>' is requested.
 
     """
-    text = text.replace('_', ' ')
-    return f"C {text}"
+    value = text.replace('_', ' ')
+    return f"C {value}"
 
 
-# Run the flask app on all addresses
 if __name__ == "__main__":
+    # Run the flask app on all addresses
     app.run(host='0.0.0.0')
