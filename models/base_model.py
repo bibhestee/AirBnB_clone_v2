@@ -43,7 +43,8 @@ class BaseModel:
             self.created_at = datetime.utcnow()
             self.updated_at = datetime.utcnow()
         else:
-            del kwargs['__class__']
+            if kwargs.__contains__('__class__'):
+                del kwargs['__class__']
             for key, value in kwargs.items():
                 if key == 'updated_at':
                     self.updated_at = datetime.strptime(kwargs['updated_at'],
@@ -53,12 +54,22 @@ class BaseModel:
                                                         self.fmt)
                 else:
                     setattr(self, key, value)
+            # Runs if new instance is not created from existing data
+            if not kwargs.__contains__('updated_at') and\
+                not kwargs.__contains__('created_at'):
+                self.id = str(uuid.uuid4())
+                self.created_at = datetime.utcnow()
+                self.updated_at = datetime.utcnow()
 
 
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
-        return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+        mod_dict = {}
+        for key, value in self.__dict__.items():
+            if not key == '_sa_instance_state':
+                mod_dict[key] = value
+        return '[{}] ({}) {}'.format(cls, self.id, mod_dict)
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -69,7 +80,11 @@ class BaseModel:
     def to_dict(self):
         """Convert instance into dict format"""
         dictionary = {}
-        dictionary.update(self.__dict__)
+        mod_dict = {}
+        for key, value in self.__dict__.items():
+            if not key == '_sa_instance_state':
+                mod_dict[key] = value
+        dictionary.update(mod_dict)
         dictionary.update({'__class__':
                           (str(type(self)).split('.')[-1]).split('\'')[0]})
         dictionary['created_at'] = self.created_at.isoformat()
