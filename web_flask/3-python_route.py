@@ -41,7 +41,7 @@ def c_route(text):
     This function returns the string "C <text>" when '/c/<text>' is requested.
     """
     text = text.replace('_', ' ')
-    return f'C {text}'
+    return 'C {}'.format(text)
 
 
 @app.route('/python', defaults={'text': 'is_cool'}, strict_slashes=False)
@@ -54,7 +54,7 @@ def python_route(text):
     Default value of text is 'is cool'.
     """
     text = text.replace('_', ' ')
-    return f'Python {text}'
+    return 'Python {}'.format(text)
 
 
 # Run the flask app on all addresses
