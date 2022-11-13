@@ -16,5 +16,6 @@ def hello():
     return "Hello HBNB!"
 
 
-# Run the flask app on all addresses
-app.run(host='0.0.0.0')
+if __name__ == "__main__":
+    # Run the flask app on all addresses
+    app.run(host='0.0.0.0')
